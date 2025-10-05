@@ -39,7 +39,7 @@ public class TmdbClientTest {
     public void testGetMovieById_success() {
         Integer movieId = 550; // Example movie ID for "Fight Club"
         MovieDetailedResponse mockResponse = MovieDetailedResponse.builder()
-            .backdropPath("backdropPath")
+            // .backdropPath("backdropPath")
             .id(550)
             .title("Fight Club")
             .overview("An insomniac office worker...")
@@ -85,7 +85,7 @@ public class TmdbClientTest {
     public void getTrendingMoviesByTimeFrame_day_success() {
         String timeFrame = "day";
         MovieDetailedResponse movie1 = MovieDetailedResponse.builder()
-            .backdropPath("backdropPath1")
+            // .backdropPath("backdropPath1")
             .id(1)
             .title("Movie 1")
             .overview("Overview 1")
@@ -95,7 +95,7 @@ public class TmdbClientTest {
             .build();
 
         MovieDetailedResponse movie2 = MovieDetailedResponse.builder()
-            .backdropPath("backdropPath2")
+            // .backdropPath("backdropPath2")
             .id(2)
             .title("Movie 2")
             .overview("Overview 2")
@@ -109,12 +109,12 @@ public class TmdbClientTest {
                 MovieSummaryResponse.builder()
                     .id(movie1.getId())
                     .title(movie1.getTitle())
-                    .overview(movie1.getOverview())
+                    // .overview(movie1.getOverview())
                     .build(),
                 MovieSummaryResponse.builder()
                     .id(movie2.getId())
                     .title(movie2.getTitle())
-                    .overview(movie2.getOverview())
+                    // .overview(movie2.getOverview())
                     .build()
             ))
             .build();

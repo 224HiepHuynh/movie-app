@@ -15,11 +15,12 @@ public class MovieSummaryResponse {
     
     private Integer id;
     private String title;
-    private String overview;
+    // private String overview;
     
+    @JsonProperty("release_date")
+    private String releaseDate;
+
     @JsonProperty("poster_path")
     private String posterPath;
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
     
 }

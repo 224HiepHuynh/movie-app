@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,12 +32,13 @@ public class TmdbController {
         return ResponseEntity.ok(movies);
     }
     
+
     @GetMapping("trending/movie/{id}")
     public ResponseEntity<MovieDetailedResponse> getMethodName(@PathVariable Integer id) {
         MovieDetailedResponse movie= tmdbClient.getMovieById(id);
         return ResponseEntity.ok(movie);
         
     }
-    
+     
     
 }

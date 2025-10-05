@@ -15,13 +15,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MovieDetailedResponse {
     
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
-
+    
     private Integer id;
     private String title;
     private String overview;
     private List<GenreResponse> genres;
+    private Integer runtime;
 
     @JsonProperty("release_date")
     private String releaseDate;
