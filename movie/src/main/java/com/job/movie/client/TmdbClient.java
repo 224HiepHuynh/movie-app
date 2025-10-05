@@ -22,7 +22,6 @@ public class TmdbClient {
 
     public List<MovieSummaryResponse> getTrendingMoviesByTimeFrame(String timeFrame) {
 
-        // String url = tmdbConfig.getTMDB_BASE_URL() + "/search/tending/movie?api_key=" + tmdbConfig.getTMDB_API_KEY() + "$query=" +query;
         String url= String.format("%s/trending/movie/%s?api_key=%s",
                 tmdbConfig.getTMDB_BASE_URL(),
                 timeFrame,
@@ -54,9 +53,9 @@ public class TmdbClient {
             return response.getBody();
         }
         else{
-            throw new RuntimeException("Failed to fetch trending movies from TMDB" + response.getStatusCode());
+            throw new RuntimeException("Failed to fetch movie by id  from TMDB" + response.getStatusCode());
         }
-        
+
     }
 
 

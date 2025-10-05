@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieSummaryResponse {
-   
+    
     private Integer id;
     private String title;
     private String overview;
