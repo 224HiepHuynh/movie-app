@@ -1,0 +1,25 @@
+package com.job.movie.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class Config {
+
+    @Bean
+    public TmdbConfig TmdbConfig(
+       @Value("${tmdb.base.url}") String TMDB_BASE_URL,
+       @Value("${tmdb.api.key}") String TMDB_API_KEY
+    ) {
+        return TmdbConfig.builder()
+                .TMDB_API_KEY(TMDB_API_KEY)
+                .TMDB_BASE_URL(TMDB_BASE_URL)
+                .build();
+    }
+
+    @Bean
+    public org.springframework.web.client.RestTemplate restTemplate() {
+        return new org.springframework.web.client.RestTemplate();
+    }
+}
