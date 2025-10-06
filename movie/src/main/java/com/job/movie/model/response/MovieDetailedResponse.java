@@ -22,6 +22,11 @@ public class MovieDetailedResponse {
     private List<GenreResponse> genres;
     private Integer runtime;
 
+    @JsonProperty("poster_path")
+    private String posterPath;
+
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
     @JsonProperty("release_date")
     private String releaseDate;
 
