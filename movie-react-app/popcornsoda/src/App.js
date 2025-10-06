@@ -1,36 +1,36 @@
 import {useEffect, useState } from "react";
 
 const tempMovieData = [
-  {
-    tmdbId: "1236470",
-    Title: "The Lost Bus",
-    Year: "2025-09-19",
-    Poster:
-      "https://image.tmdb.org/t/p/w500/zpygCOYY1DPBkeUsrrznLRN5js5.jpg",
-  },
-  {
-    tmdbId: "941109",
-    Title: "Play Dirty",
-    Year: "2025-09-30",
-    Poster:
-      "https://image.tmdb.org/t/p/w500/ovZ0zq0NwRghtWI1oLaM0lWuoEw.jpg",
-  }
+  // {
+  //   id: "1236470",
+  //   title: "The Lost Bus",
+  //   release_date: "2025-09-19",
+  //   Poster:
+  //     "https://image.tmdb.org/t/p/w500/zpygCOYY1DPBkeUsrrznLRN5js5.jpg",
+  // },
+  // {
+  //   id: "941109",
+  //   title: "Play Dirty",
+  //   release_date: "2025-09-30",
+  //   Poster:
+  //     "https://image.tmdb.org/t/p/w500/ovZ0zq0NwRghtWI1oLaM0lWuoEw.jpg",
+  // }
 ];
 
 const tempFavoriteData = [
   {
-    tmdbId: "617126",
-    Title: "The Fantastic 4: First Steps",
-    Year: "2025-07-22",
+    id: "617126",
+    title: "The Fantastic 4: First Steps",
+    release_date: "2025-07-22",
     Poster:
       "https://image.tmdb.org/t/p/w500/cm8TNGBGG0aBfWj0LgrESHv8tir.jpg",
     runtime: 148,
     voteAverge: 8.8
   },
   {
-    tmdbId: "1242404",
-    Title: "Steve",
-    Year: "2025-07-22",
+    id: "1242404",
+    title: "Steve",
+    release_date: "2025-07-22",
     Poster:
       "https://image.tmdb.org/t/p/w500/wmLoMyofbseLfxiGgk1Iz5H97c3.jpg",
     runtime: 116,
@@ -41,31 +41,32 @@ const tempFavoriteData = [
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [favorite, setFavorite] = useState(tempFavoriteData);
+  const [query, setQuery] = useState("");
+  const imageBaseUrl = "https://image.tmdb.org/t/p/w500";
 
- 
- 
-  // useEffect(() => {
-  //   fetch('http://localhost:8080/tmdb/trending/movie?time_frame=week')
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       setMovies(data);
-  //     })
-  //     .catch(err => console.error('Error fetching movies:', err));
-  // },[])
-
-
-    fetch('http://localhost:8080/tmdb/trending/movie?time_frame=week')
-      .then(res => res.json())
-      // .then(data => {
-      //   setMovies(data);
-      // })
-      .then(data => console.log(data))
+  useEffect(function() {
+   async function fetchMovies() {
+     if (!query) return; // do nothing if no selection
+     await fetch(`http://localhost:8080/tmdb/trending/movie?time_frame=${query}`)
+     .then(res => res.json())
+     .then(data => {
+       const updatedMovies = data.map(movie => ({
+         ...movie,
+         Poster: imageBaseUrl + movie.poster_path,
+        }));
+        setMovies(updatedMovies);
+      })
       .catch(err => console.error('Error fetching movies:', err));
+    }
+    fetchMovies();
+  },[query])
+
+
   return (
     <>
       <NavBar >
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery}/>
       </NavBar>
       
       <Main >
@@ -80,6 +81,9 @@ export default function App() {
   );
 }
 
+
+
+
 function NavBar({children}) {
   return (
     <nav className="nav-bar">
@@ -88,19 +92,12 @@ function NavBar({children}) {
   )
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({query, setQuery}) {
   return(
-    //  <input
-    //       className="search"
-    //       type="text"
-    //       placeholder="Search movies..."
-    //       value={query}
-    //       onChange={(e) => setQuery(e.target.value)}
-    //     />
     <select 
       className="search"
-      
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
     >
       <option value="">Select a time frame</option>
       <option value="day">Today</option>
@@ -132,7 +129,7 @@ function MovieList({movies}){
   return(
     <>
     {movies?.map((movie) => (
-             <Movie movie={movie} key={movie.tmdbId}/>  
+             <Movie movie={movie} key={movie.id}/>  
         ))}
     </>
   )
@@ -141,12 +138,12 @@ function MovieList({movies}){
 function Movie({movie}){
   return(
     <li >
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-        <h3>{movie.Title}</h3>
+      <img src={movie.Poster} alt={`${movie.title} poster`} />
+        <h3>{movie.title}</h3>
           <div>
             <p>
               <span>🗓</span>
-              <span>{movie.Year}</span>
+              <span>{movie.release_date}</span>
           </p>
         </div>
     </li> 
@@ -161,7 +158,7 @@ function FavoriteList({favorite}){
         </div>
          <ul className="list">
           {favorite.map((movie) => (
-            <FavoriteMovie movie={movie} key={movie.tmdbId}/>
+            <FavoriteMovie movie={movie} key={movie.id}/>
           ))}
         </ul>
      </>
@@ -173,8 +170,8 @@ function FavoriteList({favorite}){
 function FavoriteMovie({movie}){
   return(
     <li >
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <img src={movie.Poster} alt={`${movie.title} poster`} />
+      <h3>{movie.title}</h3>
         <div>
           <p>
           <span>🌟</span>
