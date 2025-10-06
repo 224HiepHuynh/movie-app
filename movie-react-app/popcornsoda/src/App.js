@@ -1,5 +1,9 @@
 import {useEffect, useState } from "react";
-
+import MovieDetails from "./components/MovieDetails";
+import MovieList from "./components/MovieList";
+import NavBar from "./components/NavBar";
+import FavoriteList from "./components/FavoriteList";
+import { Search } from "./components/Search";
 const tempMovieData = [
   // {
   //   id: "1236470",
@@ -96,7 +100,6 @@ export default function App() {
   return (
     <>
       <NavBar >
-        <Logo />
         <Search query={query} setQuery={setQuery}/>
       </NavBar>
       
@@ -122,37 +125,6 @@ export default function App() {
 
 
 
-function NavBar({children}) {
-  return (
-    <nav className="nav-bar">
-       {children}
-    </nav>
-  )
-}
-
-function Search({query, setQuery}) {
-  return(
-    <select 
-      className="search"
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-    >
-      <option value="">Select a trending time frame</option>
-      <option value="day">Today</option>
-      <option value="week">This Week</option>
-    </select>
-  )
-}
-
-function Logo(){
-  return(
-    <div className="logo">
-      <span role="img">🥤</span>
-      <h1>Popcorn Soda</h1>
-    </div>
-  )
-}
-
 function ListBox({children}){
   return(
     <div className="box">
@@ -161,144 +133,6 @@ function ListBox({children}){
   )
 }
 
-function MovieList({movies, onSelectMovie}){
-  return(
-    <ul className="list list-movies">
-        
-      {movies?.map((movie) => (
-      <Movie movie={movie} key={movie.id} onSelectMovie={onSelectMovie}/>  
-    ))}
-    </ul>
-  )
-}
-
-function Movie({movie, onSelectMovie}){
-  return(
-    <li  onClick={() => onSelectMovie(movie.id)}>
-      <img src={movie.poster} alt={`${movie.title} poster`} />
-        <h3>{movie.title}</h3>
-          <div>
-            <p>
-              <span>🗓</span>
-              <span>{movie.release_date}</span>
-          </p>
-        </div>
-    </li> 
-  )
-}
-
-
-
-function MovieDetails({selectedId, onCloseMovie,imageBaseUrl, onAddFavorite, favorite}) {
-    const [movieDetails, setMovieDetails] = useState({});
-    const isFavorite = favorite.map((movie) => movie.id).includes(selectedId);
-
-    const {
-      id,
-      title,
-      release_date:release,
-      overview,
-      genres,
-      runtime,
-      vote_average:rating, 
-      poster
-    }=movieDetails;
-
-
-  function handleAdd(){
-    const favMovie={
-      id,
-      title,
-      rating,
-      runtime,
-      poster
-    };
-    onAddFavorite(favMovie);
-    localStorage.setItem('favorite', JSON.stringify(favorite));
-    onCloseMovie(id);
-  }
-
-    useEffect(function(){
-    async function fetchMovieDetails() {
-      try{
-
-        const res=await fetch(`http://localhost:8080/tmdb/trending/movie/${selectedId}`)
-        const data= await res.json();
-        const updatedMovie={...data,
-        poster: imageBaseUrl + data.poster_path,};
-        console.log(updatedMovie);
-        setMovieDetails(updatedMovie);
-      }
-      catch(err){
-        console.error('Error fetching movie details:', err);
-      }
-    }
-   fetchMovieDetails();
-  },[selectedId]);
-
-  return(
-    <div className="details">
-      <header>
-        
-        <button className="btn-back" onClick={onCloseMovie}> &larr;</button>
-        <img src={poster} alt={`poster of ${movieDetails} movie`} />
-        <div className="details-overview">
-          <h2>{title} </h2>
-          <p>{release}&bull;{runtime} min</p>
-          <p>⭐{rating}</p>
-          <p>{genres?.map((g) => g.name).join(", ")}</p>
-        </div>
-      </header>
-
-      <section>
-        {!isFavorite &&
-          <>
-            <button className="btn-add" 
-            onClick={handleAdd}
-            >Add to favorites</button>
-          </>
-        }
-            <p>{overview}</p>
-      </section>
-    </div>
-  )
-}
-
-function FavoriteList({favorite}){
-  return(
-     <>
-        <div className="summary">
-          <h2>Favorites</h2>
-        </div>
-         <ul className="list">
-          {favorite.map((movie) => (
-            <FavoriteMovie movie={movie} key={movie.id}/>
-          ))}
-        </ul>
-     </>
-  )
-}
-
-
-
-function FavoriteMovie({movie}){
-  return(
-    <li >
-      <img src={movie.poster} alt={`${movie.title} poster`} />
-      <h3>{movie.title}</h3>
-        <div>
-          <p>
-          <span>🌟</span>
-          <span>{movie.voteAverge}</span>
-          </p>
-          <p>
-            <span>⏳</span>
-            <span>{movie.runtime} min</span>
-          </p>
-        </div>
-    </li>
-  )
-}
 
 function Main({children}) {
   return(
