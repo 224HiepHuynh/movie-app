@@ -47,6 +47,7 @@ git clone https://github.com/224HiepHuynh/movie-app.git
 ### 4. Set up front end
 - go to ```movie-react-app/popcornsoda``` folder
 - do ```npm install``` 
+- then do ```npm install react-scripts@5```
 - then ```npm start``` 
 - access the app at ```localhost:3000```
 

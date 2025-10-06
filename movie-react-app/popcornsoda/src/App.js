@@ -41,6 +41,23 @@ const tempFavoriteData = [
   //   voteAverge: 8.5
   // },
 ];
+const imageBaseUrl = "https://image.tmdb.org/t/p/w500";
+
+async function fetchTrendingMovies(query){
+    try {
+    const res= await fetch(`http://localhost:8080/tmdb/trending/movie?time_frame=${query}`);
+    const data= await res.json(); 
+    const updatedMovies = data.map(movie => ({
+        ...movie,
+        poster: imageBaseUrl + movie.poster_path,
+      }));
+      return updatedMovies;
+    }
+   catch (error) {
+    console.error("Error fetching movies:", error);
+    return [];
+  }
+}  
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
@@ -50,7 +67,6 @@ export default function App() {
   });
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const imageBaseUrl = "https://image.tmdb.org/t/p/w500";
 
   function handleSelectMovie(id) {
     setSelectedId((id)==selectedId?null:id);
@@ -78,22 +94,16 @@ export default function App() {
       setMovies(JSON.parse(cache));
       return;
      }
+    const movies = await fetchTrendingMovies(query);
+    setMovies(movies);
 
-     await fetch(`http://localhost:8080/tmdb/trending/movie?time_frame=${query}`)
-     .then(res => res.json())
-     .then(data => {
-       const updatedMovies = data.map(movie => ({
-         ...movie,
-         poster: imageBaseUrl + movie.poster_path,
-        }));
-        setMovies(updatedMovies);
+    //cache results
+    localStorage.setItem(`movies-${query}`, JSON.stringify(movies));
+   }
+  
+  
+   fetchMovies(query);
 
-        //cache API calls
-         localStorage.setItem(`movies-${query}`, JSON.stringify(updatedMovies));
-      })
-      .catch(err => console.error('Error fetching movies:', err));
-    }
-    fetchMovies();
   },[query])
 
 
@@ -121,7 +131,6 @@ export default function App() {
     </>
   );
 }
-
 
 
 
