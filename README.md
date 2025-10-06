@@ -30,8 +30,9 @@ This project demonstrates fetching data from a backend Java(Spring Boot) API, un
 git clone https://github.com/224HiepHuynh/movie-app.git
 ```
 ### 2. Add the API Key
-- go to ```movie/src/main/resources/```
-- add a file named ```application.properties```
+- go to ```movie-app/movie/src/main```
+- add the ```/resources``` folder
+- add a file named ```application.properties``` inside the resource folder
 - add your tmdb API key inside the file ```tmdb.api.key= the api key```
 - add ```tmdb.base.url=https://api.themoviedb.org/3```
 
