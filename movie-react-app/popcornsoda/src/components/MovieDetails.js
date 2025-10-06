@@ -37,7 +37,7 @@ export default  function MovieDetails({selectedId, onCloseMovie,imageBaseUrl, on
         const data= await res.json();
         const updatedMovie={...data,
         poster: imageBaseUrl + data.poster_path,};
-        console.log(updatedMovie);
+        // console.log(updatedMovie);
         setMovieDetails(updatedMovie);
       }
       catch(err){
